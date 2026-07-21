@@ -2,14 +2,20 @@ const btn = document.getElementById("btn");
 const sonuc = document.getElementById("sonuc");
 
 btn.onclick = async () => {
-  sonuc.innerHTML = "⏳ Maçlar yükleniyor...";
+  sonuc.innerHTML = "⏳ Canlı maçlar yükleniyor...";
 
   try {
-    const res = await fetch(
-      "https://fancy-mouse-5b1c.ravche28.workers.dev/?endpoint=fixtures&live=all"
+    const response = await fetch(
+      "https://v3.football.api-sports.io/fixtures?live=all",
+      {
+        method: "GET",
+        headers: {
+          "x-apisports-key": "7d64e0f7620285646fdc64f3538180e7"
+        }
+      }
     );
 
-    const data = await res.json();
+    const data = await response.json();
 
     if (!data.response || data.response.length === 0) {
       sonuc.innerHTML = "⚽ Şu anda canlı maç bulunmuyor.";
@@ -23,15 +29,15 @@ btn.onclick = async () => {
         <div class="card">
           <h2>${match.teams.home.name} 🆚 ${match.teams.away.name}</h2>
           <p>🏆 ${match.league.name}</p>
-          <p>⏱️ ${match.fixture.status.elapsed || 0}'</p>
-          <p>📊 ${match.goals.home} - ${match.goals.away}</p>
+          <p>⏱️ Dakika: ${match.fixture.status.elapsed || 0}</p>
+          <p>📊 Skor: ${match.goals.home} - ${match.goals.away}</p>
         </div>
       `;
     });
 
     sonuc.innerHTML = html;
 
-  } catch (e) {
-    sonuc.innerHTML = "❌ Veri alınamadı.<br>" + e.message;
+  } catch (err) {
+    sonuc.innerHTML = "❌ Hata: " + err.message;
   }
 };
