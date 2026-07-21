@@ -1,29 +1,48 @@
 const btn = document.getElementById("btn");
 const sonuc = document.getElementById("sonuc");
 
-btn.addEventListener("click", () => {
-    const mac = document.getElementById("match").value.trim();
+btn.onclick = function () {
 
-    if (mac === "") {
-        sonuc.innerHTML = "<h3>⚠️ Lütfen bir maç giriniz.</h3>";
-        return;
-    }
+const mac = document.getElementById("match").value.trim();
 
-    sonuc.innerHTML = `
-    <div class="card">
-        <h2>⚽ ${mac}</h2>
+if(mac===""){
+sonuc.innerHTML="<div class='card'><h2>⚠️ Lütfen maç giriniz</h2></div>";
+return;
+}
 
-        <p>🤖 Yapay Zeka Güven Puanı: <b>%82</b></p>
+const guven=Math.floor(Math.random()*16)+80;
+const ev=Math.floor(Math.random()*31)+40;
+const dep=Math.floor(Math.random()*21)+20;
+const ber=100-ev-dep;
 
-        <p>🎯 Maç Sonucu: <b>1</b></p>
+sonuc.innerHTML=`
 
-        <p>⚽ 2.5 Üst: <b>Evet</b></p>
+<div class="card">
 
-        <p>🤝 Karşılıklı Gol: <b>Evet</b></p>
+<h2>⚽ ${mac}</h2>
 
-        <p>🟨 İlk Yarı 0.5 Üst: <b>Evet</b></p>
+<h3>🤖 AI Güven Skoru</h3>
 
-        <p>📈 Tahmini Skor: <b>2-1</b></p>
-    </div>
-    `;
-});
+<h1 style="color:#00d4ff">${guven}%</h1>
+
+<hr>
+
+<p>🏠 Ev Sahibi Kazanır : <b>${ev}%</b></p>
+
+<p>🤝 Beraberlik : <b>${ber}%</b></p>
+
+<p>🚩 Deplasman Kazanır : <b>${dep}%</b></p>
+
+<hr>
+
+<p>⚽ 2.5 Üst : <b>Evet</b></p>
+
+<p>🤝 KG Var : <b>Evet</b></p>
+
+<p>🥅 Tahmini Skor : <b>2-1</b></p>
+
+</div>
+
+`;
+
+}
