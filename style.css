@@ -1,49 +1,56 @@
-body {
-    margin: 0;
-    padding: 40px;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
+body{
+    margin:0;
+    padding:30px;
+    background:#0f172a;
+    color:white;
+    font-family:Arial,sans-serif;
+    text-align:center;
 }
 
-h1 {
-    color: #00d4ff;
-    font-size: 40px;
+h1{
+    color:#00d4ff;
+    font-size:42px;
 }
 
-p {
-    color: #d1d5db;
-    font-size: 18px;
+p{
+    color:#d1d5db;
 }
 
-input {
-    width: 300px;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
+input{
+    width:90%;
+    max-width:400px;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    font-size:18px;
 }
 
-button {
-    margin-top: 15px;
-    padding: 12px 30px;
-    font-size: 18px;
-    border: none;
-    border-radius: 10px;
-    background: #00d4ff;
-    color: black;
-    cursor: pointer;
-    font-weight: bold;
+button{
+    margin-top:20px;
+    padding:15px 35px;
+    font-size:20px;
+    border:none;
+    border-radius:12px;
+    background:#00d4ff;
+    color:#000;
+    cursor:pointer;
+    font-weight:bold;
 }
 
-button:hover {
-    transform: scale(1.05);
+.card{
+    margin:30px auto;
+    max-width:450px;
+    background:#1e293b;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 0 20px rgba(0,212,255,.35);
 }
 
-#sonuc {
-    margin-top: 30px;
-    font-size: 22px;
-    color: #22c55e;
+.card h2{
+    color:#00d4ff;
+}
+
+.card p{
+    font-size:20px;
+    margin:14px 0;
 }
