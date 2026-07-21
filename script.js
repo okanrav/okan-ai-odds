@@ -34,25 +34,21 @@ async function loadMatches() {
 
     } catch (e) {
 
-        sonuc.innerHTML = "<div class='loading'>Hata oluştu.</div>";
+        sonuc.innerHTML = "<div class='loading'>❌ Maçlar yüklenemedi.</div>";
 
     }
 
 }
 
-function filterMatches(){
+function filterMatches() {
 
     const q = input.value.toLowerCase();
 
-    const filtered = allMatches.filter(m=>{
-
-        return (
-            m.teams.home.name.toLowerCase().includes(q) ||
-            m.teams.away.name.toLowerCase().includes(q) ||
-            m.league.name.toLowerCase().includes(q)
-        );
-
-    });
+    const filtered = allMatches.filter(m =>
+        m.teams.home.name.toLowerCase().includes(q) ||
+        m.teams.away.name.toLowerCase().includes(q) ||
+        m.league.name.toLowerCase().includes(q)
+    );
 
     drawMatches(filtered);
 
@@ -60,92 +56,114 @@ function filterMatches(){
 
 function drawMatches(matches) {
 
-    if(matches.length===0){
+    if (matches.length === 0) {
 
-        sonuc.innerHTML="<div class='loading'>Maç bulunamadı.</div>";
+        sonuc.innerHTML = "<div class='loading'>Maç bulunamadı.</div>";
         return;
 
     }
 
-    let html="";
+    let html = "";
 
-    matches.forEach(match=>{
+    matches.forEach(match => {
 
-        let durum="🕒 Başlamadı";
+        let durum = "🕒 Başlamadı";
 
-        if(match.fixture.status.short==="LIVE")
-            durum="🟢 Canlı";
+        if (["1H","2H","LIVE","HT","ET","P"].includes(match.fixture.status.short))
+            durum = "🟢 Canlı";
 
-        if(match.fixture.status.short==="FT")
-            durum="✅ Bitti";
+        if (["FT","AET","PEN"].includes(match.fixture.status.short))
+            durum = "✅ Bitti";
 
-        html+=`
+        html += `
 
-        <div class="card">
+<div class="card">
 
-            <div class="league">
-                🏆 ${match.league.name}
-            </div>
+<div class="league">
+🏆 ${match.league.name}
+</div>
 
-            <div class="time">
+<div class="time">
+${durum}<br><br>
+${new Date(match.fixture.date).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})}
+</div>
 
-                ${durum}
+<div class="teams">
 
-                <br><br>
+<div>
+<img src="${match.teams.home.logo}" width="50"><br>
+${match.teams.home.name}
+</div>
 
-                ${match.fixture.date.substring(11,16)}
+<strong>VS</strong>
 
-            </div>
+<div>
+<img src="${match.teams.away.logo}" width="50"><br>
+${match.teams.away.name}
+</div>
 
-            <div class="teams">
+</div>
 
-                <div>
+<div class="ai-box">
 
-                    <img src="${match.teams.home.logo}" width="45">
+<div class="ai-title">
+🤖 AI Analizi
+</div>
 
-                    <br>
+<button class="ai-btn"
+onclick="showAnalysis('${match.teams.home.name}','${match.teams.away.name}')">
+Analizi Gör
+</button>
 
-                    ${match.teams.home.name}
+</div>
 
-                </div>
+</div>
 
-                <strong>VS</strong>
-
-                <div>
-
-                    <img src="${match.teams.away.logo}" width="45">
-
-                    <br>
-
-                    ${match.teams.away.name}
-
-                </div>
-
-            </div>
-
-            <div class="ai-box">
-
-                <div class="ai-title">
-
-                    🤖 AI Analizi
-
-                </div>
-
-                <button class="ai-btn">
-
-                    Analizi Gör
-
-                </button>
-
-            </div>
-
-        </div>
-
-        `;
+`;
 
     });
 
-    sonuc.innerHTML=html;
+    sonuc.innerHTML = html;
+
+}
+
+function showAnalysis(home, away){
+
+alert(
+
+`🤖 OKAN AI ODDS
+
+${home}
+VS
+${away}
+
+🚧 AI Analiz Sistemi
+
+Bir sonraki sürümde bu ekranda:
+
+📊 Son 5 Maç
+
+🤝 H2H
+
+🏠 İç Saha Formu
+
+✈️ Deplasman Formu
+
+⚽ Gol Ortalaması
+
+🎯 1X2 Tahmini
+
+⚽ KG Var/Yok
+
+📈 2.5 Üst/Alt
+
+🥅 Tahmini Skor
+
+⭐ Güven Puanı
+
+gösterilecek.`
+
+);
 
 }
 
