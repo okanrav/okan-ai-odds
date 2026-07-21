@@ -1,241 +1,565 @@
+/* ===========================================
+   OKAN AI ODDS
+   STYLE.CSS
+   BÖLÜM 1
+=========================================== */
+
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 body{
-background:linear-gradient(180deg,#07111f,#0d1b2a,#07111f);
-color:#fff;
-min-height:100vh;
+
+    background:#0f172a;
+    color:#ffffff;
+    font-family:'Poppins',sans-serif;
+    min-height:100vh;
+
 }
 
+/* HEADER */
+
 .header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px;
-background:rgba(255,255,255,.05);
-backdrop-filter:blur(12px);
-border-bottom:1px solid rgba(255,255,255,.08);
-position:sticky;
-top:0;
-z-index:1000;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:20px;
+
+    background:#111827;
+
+    border-bottom:1px solid #1f2937;
+
+    position:sticky;
+    top:0;
+    z-index:999;
+
 }
 
 .logo{
-font-size:26px;
-font-weight:bold;
-color:#00d4ff;
-}
 
-.menu-btn{
-background:#00d4ff;
-color:#000;
-padding:10px 18px;
-border:none;
-border-radius:10px;
-font-size:18px;
-cursor:pointer;
-transition:.3s;
-}
+    font-size:24px;
 
-.menu-btn:hover{
-transform:scale(1.05);
-}
+    font-weight:700;
 
-.hero{
-padding:50px 20px;
-text-align:center;
-}
+    color:#38bdf8;
 
-.hero h1{
-font-size:34px;
-margin-bottom:15px;
-}
-
-.hero p{
-color:#b8c6d9;
-font-size:17px;
-line-height:1.6;
 }
 
 .search-box{
-display:flex;
-flex-direction:column;
-gap:15px;
-padding:25px;
-max-width:700px;
-margin:auto;
+
+    width:320px;
+
 }
 
 .search-box input{
-padding:16px;
-border:none;
-border-radius:15px;
-background:#17273c;
-color:#fff;
-font-size:17px;
-outline:none;
-}
 
-.search-box button{
-padding:16px;
-border:none;
-border-radius:15px;
-background:linear-gradient(90deg,#00d4ff,#0099ff);
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
-transition:.3s;
-}
+    width:100%;
 
-.search-box button:hover{
-transform:translateY(-2px);
-box-shadow:0 0 20px rgba(0,212,255,.4);
-}
+    padding:12px 18px;
 
-.title{
-padding:20px;
-font-size:24px;
-}
+    border:none;
 
-#sonuc{
-padding:20px;
-display:grid;
-gap:20px;
-}
+    outline:none;
 
-.card{
-background:rgba(255,255,255,.05);
-border:1px solid rgba(255,255,255,.08);
-backdrop-filter:blur(12px);
-border-radius:20px;
-padding:20px;
-transition:.3s;
-}
+    border-radius:12px;
 
-.card:hover{
-transform:translateY(-5px);
-box-shadow:0 0 25px rgba(0,212,255,.25);
-}
+    background:#1e293b;
 
-.league{
-color:#00d4ff;
-font-size:14px;
-margin-bottom:10px;
-}
+    color:white;
 
-.teams{
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-size:20px;
-font-weight:bold;
-margin:20px 0;
-}
-
-.time{
-text-align:center;
-color:#9fb3c8;
-margin-bottom:15px;
-}
-
-.ai-box{
-background:#0f2238;
-padding:15px;
-border-radius:15px;
-margin-top:15px;
-}
-
-.ai-title{
-color:#00d4ff;
-font-weight:bold;
-margin-bottom:10px;
-}
-
-.ai-btn{
-width:100%;
-padding:14px;
-margin-top:15px;
-border:none;
-border-radius:12px;
-background:#00d4ff;
-color:#000;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-transition:.3s;
-}
-
-.ai-btn:hover{
-background:#34e2ff;
-}
-
-.loading{
-text-align:center;
-padding:50px;
-font-size:18px;
-color:#9fb3c8;
-}
-
-footer{
-margin-top:40px;
-padding:30px;
-text-align:center;
-color:#8aa0b7;
-border-top:1px solid rgba(255,255,255,.08);
-}
-
-@media(max-width:768px){
-
-.hero h1{
-font-size:28px;
-}
-
-.teams{
-font-size:17px;
-}
-
-.logo{
-font-size:22px;
-}
+    font-size:15px;
 
 }
+
+.search-box input::placeholder{
+
+    color:#94a3b8;
+
+}
+
+/* MENU */
+
+.menu{
+
+    display:flex;
+
+    gap:10px;
+
+    padding:18px;
+
+    overflow-x:auto;
+
+    background:#0f172a;
+
+}
+
+.menu::-webkit-scrollbar{
+
+    display:none;
+
+}
+
+.menu-btn{
+
+    background:#1e293b;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:10px 18px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    white-space:nowrap;
+
+    font-weight:500;
+
+}
+
+.menu-btn:hover{
+
+    background:#2563eb;
+
+}
+
+.menu-btn.active{
+
+    background:#2563eb;
+
+}
+
+/* MATCH AREA */
+
+main{
+
+    padding:20px;
+
+}
+
+#matchesContainer{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
+
+    gap:20px;
+
+}
+
+/* ===========================================
+   MATCH CARD
+=========================================== */
+
+.match-card{
+
+    background:#111827;
+
+    border:1px solid #1f2937;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    transition:.35s;
+
+    cursor:pointer;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.match-card:hover{
+
+    transform:translateY(-6px);
+
+    border-color:#38bdf8;
+
+    box-shadow:0 12px 35px rgba(56,189,248,.18);
+
+}
+
+.match-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    top:0;
+
+    width:4px;
+
+    height:100%;
+
+    background:#38bdf8;
+
+}
+
+/* LEAGUE */
+
+.match-league{
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+    margin-bottom:14px;
+
+    font-weight:500;
+
+}
+
+/* TEAMS */
+
+.match-teams{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+}
+
+.team{
+
+    width:42%;
+
+    text-align:center;
+
+}
+
+.team-name{
+
+    font-size:16px;
+
+    font-weight:600;
+
+    line-height:1.4;
+
+}
+
+.vs{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#38bdf8;
+
+}
+
+/* TIME */
+
+.match-time{
+
+    text-align:center;
+
+    margin-top:12px;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#22c55e;
+
+}
+
+/* STATUS */
+
+.match-status{
+
+    margin-top:10px;
+
+    text-align:center;
+
+    font-size:13px;
+
+    color:#94a3b8;
+
+}
+
+/* AI BUTTON */
+
+.analysis-btn{
+
+    width:100%;
+
+    margin-top:18px;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.analysis-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+/* ===========================================
+   OKAN AI ODDS
+   STYLE.CSS
+   BÖLÜM 3
+=========================================== */
+
+/* LOADING */
+
+#loading{
+
+    text-align:center;
+
+    padding:40px;
+
+    font-size:18px;
+
+    color:#38bdf8;
+
+}
+
+/* MODAL */
 
 .modal{
-display:none;
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.7);
-z-index:999;
+
+    display:none;
+
+    position:fixed;
+
+    left:0;
+    top:0;
+
+    width:100%;
+    height:100%;
+
+    background:rgba(0,0,0,.75);
+
+    z-index:9999;
+
+    overflow:auto;
+
 }
 
 .modal-content{
-background:#111827;
-color:#fff;
-width:90%;
-max-width:420px;
-margin:8% auto;
-padding:20px;
-border-radius:18px;
-border:1px solid #00d4ff;
-box-shadow:0 0 25px rgba(0,212,255,.3);
+
+    width:90%;
+    max-width:850px;
+
+    margin:50px auto;
+
+    background:#111827;
+
+    border:1px solid #1f2937;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    color:white;
+
+    animation:modalOpen .25s ease;
+
+}
+
+@keyframes modalOpen{
+
+    from{
+
+        opacity:0;
+        transform:scale(.9);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:scale(1);
+
+    }
+
 }
 
 #closeModal{
-float:right;
-font-size:30px;
-cursor:pointer;
+
+    float:right;
+
+    font-size:34px;
+
+    cursor:pointer;
+
+    color:#ffffff;
+
+    transition:.3s;
+
 }
 
-.analysis-item{
-background:#1f2937;
-padding:12px;
-border-radius:10px;
-margin:10px 0;
+#closeModal:hover{
+
+    color:#38bdf8;
+
+}
+
+#analysisContent{
+
+    margin-top:20px;
+
+    line-height:1.8;
+
+}
+
+#analysisContent h2{
+
+    margin-bottom:15px;
+
+    color:#38bdf8;
+
+}
+
+#analysisContent h3{
+
+    margin-top:20px;
+
+    margin-bottom:10px;
+
+    color:#22c55e;
+
+}
+
+#analysisContent p{
+
+    color:#d1d5db;
+
+    margin-bottom:10px;
+
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#0f172a;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#38bdf8;
+
+    border-radius:20px;
+
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.header{
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+.search-box{
+
+    width:100%;
+
+}
+
+.logo{
+
+    font-size:22px;
+
+}
+
+#matchesContainer{
+
+    grid-template-columns:1fr;
+
+}
+
+.modal-content{
+
+    width:95%;
+
+    margin:20px auto;
+
+    padding:20px;
+
+}
+
+}
+
+@media(max-width:500px){
+
+.menu{
+
+    gap:8px;
+
+    padding:12px;
+
+}
+
+.menu-btn{
+
+    font-size:13px;
+
+    padding:9px 14px;
+
+}
+
+.team-name{
+
+    font-size:14px;
+
+}
+
+.match-time{
+
+    font-size:16px;
+
+}
+
+.logo{
+
+    font-size:20px;
+
+}
+
 }
