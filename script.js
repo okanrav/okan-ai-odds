@@ -17,7 +17,7 @@ async function loadMatches() {
 
     try {
 
-        const res = await fetch(
+        const response = await fetch(
             `https://v3.football.api-sports.io/fixtures?date=${today}`,
             {
                 headers: {
@@ -26,15 +26,16 @@ async function loadMatches() {
             }
         );
 
-        const data = await res.json();
+        const data = await response.json();
 
         allMatches = data.response || [];
 
         drawMatches(allMatches);
 
-    } catch (e) {
+    } catch (err) {
 
-        sonuc.innerHTML = "<div class='loading'>❌ Maçlar yüklenemedi.</div>";
+        sonuc.innerHTML =
+            "<div class='loading'>❌ Maçlar yüklenemedi.</div>";
 
     }
 
@@ -44,23 +45,21 @@ function filterMatches() {
 
     const q = input.value.toLowerCase();
 
-    const filtered = allMatches.filter(m =>
-        m.teams.home.name.toLowerCase().includes(q) ||
-        m.teams.away.name.toLowerCase().includes(q) ||
-        m.league.name.toLowerCase().includes(q)
+    drawMatches(
+        allMatches.filter(match =>
+            match.teams.home.name.toLowerCase().includes(q) ||
+            match.teams.away.name.toLowerCase().includes(q) ||
+            match.league.name.toLowerCase().includes(q)
+        )
     );
-
-    drawMatches(filtered);
 
 }
 
 function drawMatches(matches) {
 
     if (matches.length === 0) {
-
         sonuc.innerHTML = "<div class='loading'>Maç bulunamadı.</div>";
         return;
-
     }
 
     let html = "";
@@ -76,7 +75,6 @@ function drawMatches(matches) {
             durum = "✅ Bitti";
 
         html += `
-
 <div class="card">
 
 <div class="league">
@@ -85,20 +83,25 @@ function drawMatches(matches) {
 
 <div class="time">
 ${durum}<br><br>
-${new Date(match.fixture.date).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})}
+${new Date(match.fixture.date).toLocaleTimeString("tr-TR",{
+hour:"2-digit",
+minute:"2-digit"
+})}
 </div>
 
 <div class="teams">
 
 <div>
-<img src="${match.teams.home.logo}" width="50"><br>
+<img src="${match.teams.home.logo}" width="50">
+<br>
 ${match.teams.home.name}
 </div>
 
 <strong>VS</strong>
 
 <div>
-<img src="${match.teams.away.logo}" width="50"><br>
+<img src="${match.teams.away.logo}" width="50">
+<br>
 ${match.teams.away.name}
 </div>
 
@@ -110,60 +113,74 @@ ${match.teams.away.name}
 🤖 AI Analizi
 </div>
 
-<button class="ai-btn"
-onclick="showAnalysis('${match.teams.home.name}','${match.teams.away.name}')">
+<button
+class="ai-btn"
+data-home="${match.teams.home.name}"
+data-away="${match.teams.away.name}">
 Analizi Gör
 </button>
 
 </div>
 
 </div>
-
 `;
 
     });
 
     sonuc.innerHTML = html;
 
+    document.querySelectorAll(".ai-btn").forEach(button => {
+
+        button.addEventListener("click", function () {
+
+            showAnalysis(
+                this.dataset.home,
+                this.dataset.away
+            );
+
+        });
+
+    });
+
 }
 
-function showAnalysis(home, away){
+function showAnalysis(home, away) {
 
-alert(
+    const mesaj = `🤖 OKAN AI ODDS
 
-`🤖 OKAN AI ODDS
+⚽ ${home}
+🆚 ${away}
 
-${home}
-VS
-${away}
+━━━━━━━━━━━━━━
 
-🚧 AI Analiz Sistemi
+📊 AI Analizi
 
-Bir sonraki sürümde bu ekranda:
+🔥 Form Analizi
+• Yakında
 
-📊 Son 5 Maç
-
-🤝 H2H
+🤝 H2H Analizi
+• Yakında
 
 🏠 İç Saha Formu
+• Yakında
 
 ✈️ Deplasman Formu
+• Yakında
 
-⚽ Gol Ortalaması
+⚽ Gol Analizi
+• Yakında
 
-🎯 1X2 Tahmini
-
-⚽ KG Var/Yok
-
-📈 2.5 Üst/Alt
-
-🥅 Tahmini Skor
+🎯 AI Tahmini
+• Yakında
 
 ⭐ Güven Puanı
+• Hesaplanıyor...
 
-gösterilecek.`
+━━━━━━━━━━━━━━
 
-);
+OKAN AI ODDS`;
+
+    alert(mesaj);
 
 }
 
