@@ -11,7 +11,8 @@ input.addEventListener("input", filterMatches);
 
 async function loadMatches() {
 
-    sonuc.innerHTML = "<div class='loading'>⏳ Maçlar yükleniyor...</div>";
+    sonuc.innerHTML =
+        "<div class='loading'>⏳ Maçlar yükleniyor...</div>";
 
     const today = new Date().toISOString().split("T")[0];
 
@@ -32,10 +33,10 @@ async function loadMatches() {
 
         drawMatches(allMatches);
 
-    } catch (err) {
+    } catch (e) {
 
         sonuc.innerHTML =
-            "<div class='loading'>❌ Maçlar yüklenemedi.</div>";
+            "<div class='loading'>❌ Veri alınamadı.</div>";
 
     }
 
@@ -46,11 +47,17 @@ function filterMatches() {
     const q = input.value.toLowerCase();
 
     drawMatches(
+
         allMatches.filter(match =>
+
             match.teams.home.name.toLowerCase().includes(q) ||
+
             match.teams.away.name.toLowerCase().includes(q) ||
+
             match.league.name.toLowerCase().includes(q)
+
         )
+
     );
 
 }
@@ -58,8 +65,12 @@ function filterMatches() {
 function drawMatches(matches) {
 
     if (matches.length === 0) {
-        sonuc.innerHTML = "<div class='loading'>Maç bulunamadı.</div>";
+
+        sonuc.innerHTML =
+        "<div class='loading'>Maç bulunamadı.</div>";
+
         return;
+
     }
 
     let html = "";
@@ -68,13 +79,22 @@ function drawMatches(matches) {
 
         let durum = "🕒 Başlamadı";
 
-        if (["1H","2H","LIVE","HT","ET","P"].includes(match.fixture.status.short))
+        if (
+            ["1H","2H","LIVE","HT","ET","P"]
+            .includes(match.fixture.status.short)
+        ) {
             durum = "🟢 Canlı";
+        }
 
-        if (["FT","AET","PEN"].includes(match.fixture.status.short))
+        if (
+            ["FT","AET","PEN"]
+            .includes(match.fixture.status.short)
+        ) {
             durum = "✅ Bitti";
+        }
 
         html += `
+
 <div class="card">
 
 <div class="league">
@@ -83,26 +103,39 @@ function drawMatches(matches) {
 
 <div class="time">
 ${durum}<br><br>
-${new Date(match.fixture.date).toLocaleTimeString("tr-TR",{
+
+${new Date(match.fixture.date).toLocaleTimeString(
+"tr-TR",
+{
 hour:"2-digit",
 minute:"2-digit"
-})}
+}
+)}
+
 </div>
 
 <div class="teams">
 
 <div>
+
 <img src="${match.teams.home.logo}" width="50">
+
 <br>
+
 ${match.teams.home.name}
+
 </div>
 
 <strong>VS</strong>
 
 <div>
+
 <img src="${match.teams.away.logo}" width="50">
+
 <br>
+
 ${match.teams.away.name}
+
 </div>
 
 </div>
@@ -110,19 +143,24 @@ ${match.teams.away.name}
 <div class="ai-box">
 
 <div class="ai-title">
-🤖 AI Analizi
+
+🤖 OKAN AI ODDS
+
 </div>
 
 <button
 class="ai-btn"
 data-home="${match.teams.home.name}"
 data-away="${match.teams.away.name}">
+
 Analizi Gör
+
 </button>
 
 </div>
 
 </div>
+
 `;
 
     });
@@ -131,74 +169,38 @@ Analizi Gör
 
     document.querySelectorAll(".ai-btn").forEach(button => {
 
-        button.addEventListener("click", function () {
+        button.onclick = function () {
 
             showAnalysis(
+
                 this.dataset.home,
+
                 this.dataset.away
+
             );
 
-        });
+        };
 
     });
 
 }
 
-function showAnalysis(home, away) {
-
-    const modal = document.getElementById("analysisModal");
-    const content = document.getElementById("analysisContent");
-
-    content.innerHTML = `
-        <h3 style="text-align:center">${home} 🆚 ${away}</h3>
-
-        <div class="analysis-item">
-            📊 <b>Form Analizi</b><br>
-            Yakında...
-        </div>
-
-        <div class="analysis-item">
-            🤝 <b>H2H Analizi</b><br>
-            Yakında...
-        </div>
-
-        <div class="analysis-item">
-            🏠 <b>İç Saha Formu</b><br>
-            Yakında...
-        </div>
-
-        <div class="analysis-item">
-            ✈️ <b>Deplasman Formu</b><br>
-            Yakında...
-        </div>
-
-        <div class="analysis-item">
-            ⚽ <b>Gol Analizi</b><br>
-            Yakında...
-        </div>
-
-        <div class="analysis-item">
-            🎯 <b>AI Tahmini</b><br>
-            Hesaplanıyor...
-        </div>
-
-        <div class="analysis-item">
-            ⭐ <b>Güven Puanı</b><br>
-            %0
-        </div>
-    `;
-
-
-    modal.style.display = "block";
-}
-
 document.getElementById("closeModal").onclick = function () {
+
     document.getElementById("analysisModal").style.display = "none";
+
 };
 
 window.onclick = function (e) {
-    if (e.target === document.getElementById("analysisModal")) {
-        document.getElementById("analysisModal").style.display = "none";
+
+    const modal = document.getElementById("analysisModal");
+
+    if (e.target === modal) {
+
+        modal.style.display = "none";
+
     }
+
 };
+
 loadMatches();
