@@ -1,7 +1,15 @@
 const btn = document.getElementById("btn");
 const sonuc = document.getElementById("sonuc");
+const input = document.getElementById("match");
 
-btn.onclick = async () => {
+const API_KEY = "7d64e0f7620285646fdc64f3538180e7";
+
+let allMatches = [];
+
+btn.addEventListener("click", loadMatches);
+input.addEventListener("input", filterMatches);
+
+async function loadMatches() {
 
     sonuc.innerHTML = "<div class='loading'>⏳ Maçlar yükleniyor...</div>";
 
@@ -9,76 +17,43 @@ btn.onclick = async () => {
 
     try {
 
-        const response = await fetch(
+        const res = await fetch(
             `https://v3.football.api-sports.io/fixtures?date=${today}`,
             {
                 headers: {
-                    "x-apisports-key": "BURAYA_YENİ_API_ANAHTARINI_YAZ"
+                    "x-apisports-key": API_KEY
                 }
             }
         );
 
-        const data = await response.json();
+        const data = await res.json();
 
-        if (!data.response || data.response.length === 0) {
-            sonuc.innerHTML = "<div class='loading'>Bugün maç bulunamadı.</div>";
-            return;
-        }
+        allMatches = data.response || [];
 
-        let html = "";
-
-        data.response.forEach(match => {
-
-            html += `
-            <div class="card">
-
-                <div class="league">
-                    🏆 ${match.league.name}
-                </div>
-
-                <div class="teams">
-
-                    <div>
-                        <img src="${match.teams.home.logo}" width="40"><br>
-                        ${match.teams.home.name}
-                    </div>
-
-                    <strong>VS</strong>
-
-                    <div>
-                        <img src="${match.teams.away.logo}" width="40"><br>
-                        ${match.teams.away.name}
-                    </div>
-
-                </div>
-
-                <div class="time">
-                    🕒 ${match.fixture.date.substring(11,16)}
-                </div>
-
-                <div class="ai-box">
-
-                    <div class="ai-title">
-                        🤖 AI Analizi
-                    </div>
-
-                    <button class="ai-btn">
-                        Analizi Gör
-                    </button>
-
-                </div>
-
-            </div>
-            `;
-
-        });
-
-        sonuc.innerHTML = html;
+        drawMatches(allMatches);
 
     } catch (e) {
 
-        sonuc.innerHTML = "<div class='loading'>Bir hata oluştu.</div>";
+        sonuc.innerHTML = "<div class='loading'>Hata oluştu.</div>";
 
     }
 
-};
+}
+
+function filterMatches(){
+
+    const q = input.value.toLowerCase();
+
+    const filtered = allMatches.filter(m=>{
+
+        return (
+            m.teams.home.name.toLowerCase().includes(q) ||
+            m.teams.away.name.toLowerCase().includes(q) ||
+            m.league.name.toLowerCase().includes(q)
+        );
+
+    });
+
+    drawMatches(filtered);
+
+}
