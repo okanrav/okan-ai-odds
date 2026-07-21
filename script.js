@@ -518,55 +518,74 @@ function calculateForm(matches,teamId){
 
 }
 
-//============== AI MOTORU ==============//
+/*==================================================
+        PROFESYONEL AI MOTORU V2
+==================================================*/
 
-function generatePrediction(home,away){
+function generatePrediction(data){
 
-    let homeChance = 50 + (home.win-away.win)*5;
+    let homeScore = 0;
+    let awayScore = 0;
 
-    homeChance = Math.max(10,Math.min(80,homeChance));
+    // FORM
+    homeScore += data.homeForm.win * 3;
+    awayScore += data.awayForm.win * 3;
 
-    let awayChance = 100-homeChance-15;
+    homeScore += data.homeForm.draw;
+    awayScore += data.awayForm.draw;
 
-    if(awayChance<10){
+    // MAĞLUBİYET CEZASI
+    homeScore -= data.homeForm.lose * 2;
+    awayScore -= data.awayForm.lose * 2;
 
-        awayChance=10;
+    // EV SAHİBİ AVANTAJI
+    homeScore += 5;
+
+    // GOL ORTALAMASI
+    homeScore += data.homeGoalAverage * 2;
+    awayScore += data.awayGoalAverage * 2;
+
+    return calculateAIResult(homeScore, awayScore);
+
+}
+
+/*==================================================
+        AI SONUÇ HESABI
+==================================================*/
+
+function calculateAIResult(homeScore, awayScore){
+
+    let total = homeScore + awayScore;
+
+    if(total <= 0){
+
+        total = 1;
 
     }
 
-    const draw = 100-homeChance-awayChance;
+    let home = Math.round((homeScore / total) * 100);
+    let away = Math.round((awayScore / total) * 100);
 
-    const confidence = Math.max(homeChance,awayChance);
+    let draw = 100 - home - away;
 
-    let comment="Karşılaşma dengeli görünüyor.";
+    if(draw < 10){
 
-    if(confidence>=75){
-
-        comment="Belirgin bir favori bulunuyor.";
-
-    }
-
-    else if(confidence>=65){
-
-        comment="Favori taraf bir adım önde.";
+        draw = 10;
 
     }
+
+    let confidence = Math.max(home, away);
 
     return{
 
-        home:homeChance,
-
-        draw:draw,
-
-        away:awayChance,
-
-        confidence:confidence,
-
-        comment:comment
+        home,
+        draw,
+        away,
+        confidence
 
     };
 
-                }
+}
 
 /*==================================================
             BÖLÜM 3
