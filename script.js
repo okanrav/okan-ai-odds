@@ -188,6 +188,7 @@ function showAnalysis(home, away) {
         </div>
     `;
 
+
     modal.style.display = "block";
 }
 
@@ -200,3 +201,4 @@ window.onclick = function (e) {
         document.getElementById("analysisModal").style.display = "none";
     }
 };
+loadMatches();
