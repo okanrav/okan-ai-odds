@@ -1,56 +1,61 @@
 body{
-    margin:0;
-    padding:30px;
-    background:#0f172a;
-    color:white;
-    font-family:Arial,sans-serif;
-    text-align:center;
+margin:0;
+padding:30px;
+background:#0b1220;
+font-family:Arial,sans-serif;
+color:white;
+text-align:center;
 }
 
 h1{
-    color:#00d4ff;
-    font-size:42px;
-}
-
-p{
-    color:#d1d5db;
+font-size:42px;
+color:#00d4ff;
 }
 
 input{
-    width:90%;
-    max-width:400px;
-    padding:15px;
-    border:none;
-    border-radius:12px;
-    font-size:18px;
+width:90%;
+max-width:420px;
+padding:15px;
+font-size:18px;
+border:none;
+border-radius:12px;
+margin-top:20px;
 }
 
 button{
-    margin-top:20px;
-    padding:15px 35px;
-    font-size:20px;
-    border:none;
-    border-radius:12px;
-    background:#00d4ff;
-    color:#000;
-    cursor:pointer;
-    font-weight:bold;
+margin-top:20px;
+padding:15px 40px;
+font-size:20px;
+font-weight:bold;
+border:none;
+border-radius:12px;
+background:#00d4ff;
+cursor:pointer;
 }
 
 .card{
-    margin:30px auto;
-    max-width:450px;
-    background:#1e293b;
-    border-radius:18px;
-    padding:25px;
-    box-shadow:0 0 20px rgba(0,212,255,.35);
+background:#162033;
+max-width:500px;
+margin:30px auto;
+padding:25px;
+border-radius:20px;
+box-shadow:0 0 25px rgba(0,212,255,.35);
 }
 
-.card h2{
-    color:#00d4ff;
+.bar{
+height:18px;
+background:#26354d;
+border-radius:30px;
+overflow:hidden;
+margin:15px 0;
 }
 
-.card p{
-    font-size:20px;
-    margin:14px 0;
+.fill{
+height:100%;
+background:#00d4ff;
+}
+
+hr{
+border:1px solid #32425c;
+margin:20px 0;
 }
