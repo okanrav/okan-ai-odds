@@ -2,94 +2,117 @@
 <html lang="tr">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OKAN AI ODDS</title>
 
-<title>OKAN AI ODDS</title>
+    <link rel="stylesheet" href="style.css">
 
-<link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<header class="header">
+    <!-- HEADER -->
 
-<div class="logo">
-⚽ <span>OKAN AI ODDS</span>
-</div>
+    <header class="header">
 
-<nav>
-<button class="menu-btn">☰</button>
-</nav>
+        <div class="logo">
 
-</header>
+            ⚽ OKAN AI ODDS
 
-<section class="hero">
+        </div>
 
-<h1>Profesyonel Futbol Analiz Platformu</h1>
+        <div class="search-box">
 
-<p>
-Yapay zekâ destekli futbol analizleri, istatistikler ve maç tahminleri.
-</p>
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Takım ara...">
 
-</section>
+        </div>
 
-<section class="search-box">
+    </header>
 
-<input
-id="match"
-type="text"
-placeholder="Takım veya lig ara...">
+    <!-- MENU -->
 
-<button id="btn">
-Maçları Getir
-</button>
+    <nav class="menu">
 
-</section>
+        <button class="menu-btn active">
 
-<section>
+            Tümü
 
-<h2 class="title">
-🔥 Bugünkü Maçlar
-</h2>
+        </button>
 
-<div id="sonuc">
+        <button class="menu-btn">
 
-<div class="loading">
-⏳ Maçlar yükleniyor...
-</div>
+            Canlı
 
-</div>
+        </button>
 
-</section>
+        <button class="menu-btn">
 
-<!-- AI Analiz Penceresi -->
+            Bugün
 
-<div id="analysisModal" class="modal">
+        </button>
 
-<div class="modal-content">
+        <button class="menu-btn">
 
-<span id="closeModal">&times;</span>
+            Güvenli
 
-<h2>🤖 OKAN AI ODDS</h2>
+        </button>
 
-<div id="analysisContent"></div>
+        <button class="menu-btn">
 
-</div>
+            Premium
 
-</div>
+        </button>
 
-<footer>
+    </nav>
 
-<p>
-© 2026 OKAN AI ODDS
-</p>
+    <!-- MATCHES -->
 
-</footer>
+    <main>
 
-<script src="script.js"></script>
+        <div id="matchesContainer">
+
+        </div>
+
+    </main>
+
+    <!-- LOADING -->
+
+    <div id="loading">
+
+        Maçlar yükleniyor...
+
+    </div>
+
+    <!-- ANALYSIS -->
+
+    <div id="analysisModal" class="modal">
+
+        <div class="modal-content">
+
+            <span id="closeModal">
+
+                &times;
+
+            </span>
+
+            <div id="analysisContent">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
 
 </body>
 
