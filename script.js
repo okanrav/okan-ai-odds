@@ -146,42 +146,57 @@ Analizi Gör
 
 function showAnalysis(home, away) {
 
-    const mesaj = `🤖 OKAN AI ODDS
+    const modal = document.getElementById("analysisModal");
+    const content = document.getElementById("analysisContent");
 
-⚽ ${home}
-🆚 ${away}
+    content.innerHTML = `
+        <h3 style="text-align:center">${home} 🆚 ${away}</h3>
 
-━━━━━━━━━━━━━━
+        <div class="analysis-item">
+            📊 <b>Form Analizi</b><br>
+            Yakında...
+        </div>
 
-📊 AI Analizi
+        <div class="analysis-item">
+            🤝 <b>H2H Analizi</b><br>
+            Yakında...
+        </div>
 
-🔥 Form Analizi
-• Yakında
+        <div class="analysis-item">
+            🏠 <b>İç Saha Formu</b><br>
+            Yakında...
+        </div>
 
-🤝 H2H Analizi
-• Yakında
+        <div class="analysis-item">
+            ✈️ <b>Deplasman Formu</b><br>
+            Yakında...
+        </div>
 
-🏠 İç Saha Formu
-• Yakında
+        <div class="analysis-item">
+            ⚽ <b>Gol Analizi</b><br>
+            Yakında...
+        </div>
 
-✈️ Deplasman Formu
-• Yakında
+        <div class="analysis-item">
+            🎯 <b>AI Tahmini</b><br>
+            Hesaplanıyor...
+        </div>
 
-⚽ Gol Analizi
-• Yakında
+        <div class="analysis-item">
+            ⭐ <b>Güven Puanı</b><br>
+            %0
+        </div>
+    `;
 
-🎯 AI Tahmini
-• Yakında
-
-⭐ Güven Puanı
-• Hesaplanıyor...
-
-━━━━━━━━━━━━━━
-
-OKAN AI ODDS`;
-
-    alert(mesaj);
-
+    modal.style.display = "block";
 }
 
-loadMatches();
+document.getElementById("closeModal").onclick = function () {
+    document.getElementById("analysisModal").style.display = "none";
+};
+
+window.onclick = function (e) {
+    if (e.target === document.getElementById("analysisModal")) {
+        document.getElementById("analysisModal").style.display = "none";
+    }
+};
