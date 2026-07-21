@@ -1,65 +1,35 @@
-/*====================================================
-            OKAN AI ODDS v2.0
+/*==================================================
+            OKAN AI ODDS
             SCRIPT.JS
-            BÖLÜM 1 / 10
-====================================================*/
+            BÖLÜM 1
+==================================================*/
 
-//====================//
-//      API
-//====================//
+//================ API =================//
 
 const API_KEY = "7d64e0f7620285646fdc64f3538180e7";
 const API_URL = "https://v3.football.api-sports.io";
 
-//====================//
-//      DOM
-//====================//
+//================ DOM =================//
 
 const matchesContainer = document.getElementById("matchesContainer");
 const loading = document.getElementById("loading");
 const searchInput = document.getElementById("searchInput");
+
 const modal = document.getElementById("analysisModal");
 const analysisContent = document.getElementById("analysisContent");
 const closeModal = document.getElementById("closeModal");
 
-//====================//
-//      DATA
-//====================//
+//================ DATA =================//
 
 let allMatches = [];
 let filteredMatches = [];
-let selectedLeague = "ALL";
 let today = "";
 
-//====================//
-//      APP START
-//====================//
+//================ START =================//
 
-window.onload = function () {
+window.onload = async () => {
 
-    getTodayDate();
-
-    initializeApp();
-
-};
-
-//====================//
-//      DATE
-//====================//
-
-function getTodayDate() {
-
-    const d = new Date();
-
-    today = d.toISOString().split("T")[0];
-
-}
-
-//====================//
-//      APP
-//====================//
-
-async function initializeApp() {
+    getToday();
 
     showLoading();
 
@@ -67,504 +37,63 @@ async function initializeApp() {
 
     hideLoading();
 
-}
+    initializeSearch();
 
-//====================//
-//      LOADING
-//====================//
+    initializeMenu();
 
-function showLoading() {
+};
 
-    loading.style.display = "block";
+//================ DATE =================//
 
-}
+function getToday(){
 
-function hideLoading() {
+    const d = new Date();
 
-    loading.style.display = "none";
+    today = d.toISOString().split("T")[0];
 
 }
 
-//====================//
-//      ERROR
-//====================//
+//================ LOADING =================//
 
-function showError(message) {
+function showLoading(){
 
-    matchesContainer.innerHTML = `
+    loading.style.display="block";
 
-        <div style="
-            text-align:center;
-            padding:40px;
-            color:white;
-            font-size:20px;
-        ">
-            ${message}
-        </div>
+}
 
+function hideLoading(){
+
+    loading.style.display="none";
+
+}
+
+//================ ERROR =================//
+
+function showError(text){
+
+    matchesContainer.innerHTML=
+
+    `
+    <div class="error-box">
+
+        ${text}
+
+    </div>
     `;
 
 }
 
-/*====================================================
-            BÖLÜM 2 / 10
-            MAÇLARI ÇEK
-====================================================*/
+//================ API =================//
 
-async function loadMatches() {
+async function loadMatches(){
 
-    try {
+    try{
 
-        const response = await fetch(
+        const response=await fetch(
 
             `${API_URL}/fixtures?date=${today}`,
 
             {
-                method: "GET",
-                headers: {
-                    "x-apisports-key": API_KEY
-                }
-            }
-
-        );
-
-        const data = await response.json();
-
-        allMatches = data.response || [];
-
-        filteredMatches = [...allMatches];
-
-        renderMatches();
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        showError("Maçlar yüklenemedi.");
-
-    }
-
-}
-
-/*====================================================
-            MAÇLARI GÖSTER
-====================================================*/
-
-function renderMatches() {
-
-    matchesContainer.innerHTML = "";
-
-    if (filteredMatches.length === 0) {
-
-        showError("Bugün maç bulunamadı.");
-
-        return;
-
-    }
-
-    filteredMatches.forEach(match => {
-
-        const home = match.teams.home.name;
-        const away = match.teams.away.name;
-
-        const league = match.league.name;
-
-        const time = new Date(match.fixture.date)
-        .toLocaleTimeString("tr-TR", {
-            hour: "2-digit",
-            minute: "2-digit"
-        });
-
-        matchesContainer.innerHTML += `
-
-        <div class="match-card">
-
-            <div class="match-league">
-                ${league}
-            </div>
-
-            <div class="match-teams">
-
-                <div class="team">
-
-                    <div class="team-name">
-
-                        ${home}
-
-                    </div>
-
-                </div>
-
-                <div class="vs">
-
-                    VS
-
-                </div>
-
-                <div class="team">
-
-                    <div class="team-name">
-
-                        ${away}
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="match-time">
-
-                ${time}
-
-            </div>
-
-            <button
-                class="analysis-btn"
-                onclick="showAnalysis(${match.fixture.id})">
-
-                AI Analizi
-
-            </button>
-
-        </div>
-
-        `;
-
-    });
-
-}
-
-/*====================================================
-            BÖLÜM 3 / 10
-            ARAMA + MODAL
-====================================================*/
-
-//==============//
-//   SEARCH
-//==============//
-
-searchInput.addEventListener("input", () => {
-
-    const value = searchInput.value
-        .toLowerCase()
-        .trim();
-
-    if (value === "") {
-
-        filteredMatches = [...allMatches];
-
-        renderMatches();
-
-        return;
-
-    }
-
-    filteredMatches = allMatches.filter(match => {
-
-        return (
-
-            match.teams.home.name
-                .toLowerCase()
-                .includes(value)
-
-            ||
-
-            match.teams.away.name
-                .toLowerCase()
-                .includes(value)
-
-            ||
-
-            match.league.name
-                .toLowerCase()
-                .includes(value)
-
-        );
-
-    });
-
-    renderMatches();
-
-});
-
-//==============//
-//   ANALYSIS
-//==============//
-
-function showAnalysis(id){
-
-    const match = allMatches.find(
-
-        m => m.fixture.id === id
-
-    );
-
-    if(!match) return;
-
-    analysisContent.innerHTML = `
-
-        <h2>
-
-            ${match.teams.home.name}
-
-            vs
-
-            ${match.teams.away.name}
-
-        </h2>
-
-        <hr><br>
-
-        <p><b>🏆 Lig:</b>
-
-        ${match.league.name}</p>
-
-        <p><b>🕒 Saat:</b>
-
-        ${new Date(match.fixture.date)
-            .toLocaleString("tr-TR")}
-
-        </p>
-
-        <p><b>📊 Durum:</b>
-
-        ${match.fixture.status.long}
-
-        </p>
-
-        <br>
-
-        <h3>🤖 OKAN AI ODDS</h3>
-
-        <p>
-
-        Analiz motoru hazırlanıyor...
-
-        </p>
-
-        <br>
-
-        <h3>🎯 Tahmini Skor</h3>
-
-        <p>-</p>
-
-        <br>
-
-        <h3>⭐ Güven</h3>
-
-        <p>0 / 100</p>
-
-    `;
-
-    modal.style.display = "block";
-
-}
-
-//==============//
-//   CLOSE
-//==============//
-
-closeModal.onclick = () => {
-
-    modal.style.display = "none";
-
-};
-
-window.onclick = e => {
-
-    if(e.target === modal){
-
-        modal.style.display = "none";
-
-    }
-
-};
-
-/*====================================================
-            BÖLÜM 4 / 10
-            MENÜ FİLTRELERİ
-====================================================*/
-
-const menuButtons = document.querySelectorAll(".menu-btn");
-
-menuButtons.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        menuButtons.forEach(btn =>
-            btn.classList.remove("active")
-        );
-
-        button.classList.add("active");
-
-        const text = button.textContent.trim();
-
-        switch(text){
-
-            case "Tümü":
-
-                filteredMatches = [...allMatches];
-
-                break;
-
-            case "Canlı":
-
-                filteredMatches = allMatches.filter(match => {
-
-                    return match.fixture.status.short === "1H" ||
-                           match.fixture.status.short === "2H" ||
-                           match.fixture.status.short === "HT" ||
-                           match.fixture.status.short === "ET" ||
-                           match.fixture.status.short === "BT";
-
-                });
-
-                break;
-
-            case "Bugün":
-
-                filteredMatches = [...allMatches];
-
-                break;
-
-            case "Güvenli":
-
-                filteredMatches = [...allMatches];
-
-                break;
-
-            case "Premium":
-
-                filteredMatches = [...allMatches];
-
-                break;
-
-            default:
-
-                filteredMatches = [...allMatches];
-
-        }
-
-        renderMatches();
-
-    });
-
-});
-
-/*====================================================
-            MAÇ DURUMU
-====================================================*/
-
-function getMatchStatus(match){
-
-    const status = match.fixture.status.short;
-
-    if(status==="NS") return "⏳ Başlamadı";
-
-    if(status==="1H") return "🟢 İlk Yarı";
-
-    if(status==="HT") return "☕ Devre";
-
-    if(status==="2H") return "🟢 İkinci Yarı";
-
-    if(status==="FT") return "✔️ Maç Bitti";
-
-    if(status==="ET") return "⏱️ Uzatma";
-
-    if(status==="PEN") return "🎯 Penaltılar";
-
-    return status;
-
-}
-
-/*====================================================
-            BÖLÜM 5 / 10
-        AI TAHMİN MOTORU V1
-====================================================*/
-
-function generatePrediction(match){
-
-    let home = 33;
-    let draw = 34;
-    let away = 33;
-
-    if(match.teams.home.winner === true){
-
-        home = 65;
-        draw = 20;
-        away = 15;
-
-    }
-
-    if(match.teams.away.winner === true){
-
-        home = 15;
-        draw = 20;
-        away = 65;
-
-    }
-
-    const confidence = Math.max(home, away);
-
-    return{
-
-        home,
-        draw,
-        away,
-        confidence
-
-    };
-
-}
-
-
-/*====================================================
-            AI ANALİZ METNİ
-====================================================*/
-
-function createAIComment(prediction){
-
-    if(prediction.confidence >= 80){
-
-        return "Çok güçlü favori görünüyor.";
-
-    }
-
-    if(prediction.confidence >= 65){
-
-        return "Favori taraf önde görünüyor.";
-
-    }
-
-    if(prediction.confidence >= 55){
-
-        return "Dengeli fakat küçük avantaj var.";
-
-    }
-
-    return "Karşılaşma oldukça dengeli görünüyor.";
-
-}
-
-/*====================================================
-            BÖLÜM 6 / 10
-          TAKIM FORMU (API)
-====================================================*/
-
-async function getLastMatches(teamId){
-
-    try{
-
-        const response = await fetch(
-
-            `${API_URL}/fixtures?team=${teamId}&last=5`,
-
-            {
-
-                method:"GET",
 
                 headers:{
 
@@ -576,15 +105,364 @@ async function getLastMatches(teamId){
 
         );
 
-        const data = await response.json();
+        const json=await response.json();
 
-        return data.response || [];
+        allMatches=json.response || [];
+
+        filteredMatches=[...allMatches];
+
+        renderMatches();
 
     }
 
-    catch(error){
+    catch(e){
 
-        console.error(error);
+        console.log(e);
+
+        showError("Maçlar yüklenemedi.");
+
+    }
+
+}
+
+//================ RENDER =================//
+
+function renderMatches(){
+
+    matchesContainer.innerHTML="";
+
+    if(filteredMatches.length===0){
+
+        showError("Maç bulunamadı.");
+
+        return;
+
+    }
+
+    filteredMatches.forEach(match=>{
+
+        const card=createMatchCard(match);
+
+        matchesContainer.appendChild(card);
+
+    });
+
+}
+
+//================ CARD =================//
+
+function createMatchCard(match){
+
+    const card=document.createElement("div");
+
+    card.className="match-card";
+
+    const time=new Date(match.fixture.date)
+    .toLocaleTimeString("tr-TR",{
+
+        hour:"2-digit",
+
+        minute:"2-digit"
+
+    });
+
+    card.innerHTML=`
+
+        <div class="league">
+
+            ${match.league.name}
+
+        </div>
+
+        <div class="teams">
+
+            <div>
+
+                ${match.teams.home.name}
+
+            </div>
+
+            <div class="vs">
+
+                VS
+
+            </div>
+
+            <div>
+
+                ${match.teams.away.name}
+
+            </div>
+
+        </div>
+
+        <div class="time">
+
+            ${time}
+
+        </div>
+
+        <button class="analysis-btn">
+
+            AI Analizi
+
+        </button>
+
+    `;
+
+    card
+    .querySelector(".analysis-btn")
+    .addEventListener("click",()=>{
+
+        openAnalysis(match);
+
+    });
+
+    return card;
+
+}
+
+//================ SEARCH =================//
+
+function initializeSearch(){
+
+    searchInput.addEventListener("input",()=>{
+
+        const value=searchInput.value
+        .toLowerCase()
+        .trim();
+
+        if(value===""){
+
+            filteredMatches=[...allMatches];
+
+        }
+
+        else{
+
+            filteredMatches=allMatches.filter(match=>{
+
+                return(
+
+                    match.teams.home.name
+                    .toLowerCase()
+                    .includes(value)
+
+                    ||
+
+                    match.teams.away.name
+                    .toLowerCase()
+                    .includes(value)
+
+                    ||
+
+                    match.league.name
+                    .toLowerCase()
+                    .includes(value)
+
+                );
+
+            });
+
+        }
+
+        renderMatches();
+
+    });
+
+}
+
+//================ MENU =================//
+
+function initializeMenu(){
+
+    const buttons=document.querySelectorAll(".menu-btn");
+
+    buttons.forEach(btn=>{
+
+        btn.addEventListener("click",()=>{
+
+            buttons.forEach(x=>x.classList.remove("active"));
+
+            btn.classList.add("active");
+
+            filterMatches(btn.innerText.trim());
+
+        });
+
+    });
+
+}
+
+function filterMatches(type){
+
+    switch(type){
+
+        case "Tümü":
+
+            filteredMatches=[...allMatches];
+
+            break;
+
+        case "Canlı":
+
+            filteredMatches=allMatches.filter(m=>{
+
+                return["1H","HT","2H","ET","BT"]
+                .includes(m.fixture.status.short);
+
+            });
+
+            break;
+
+        default:
+
+            filteredMatches=[...allMatches];
+
+    }
+
+    renderMatches();
+
+}
+
+/*==================================================
+            BÖLÜM 2
+        AI ANALİZ SİSTEMİ
+==================================================*/
+
+//============== MODAL ==============//
+
+closeModal.onclick = () => {
+
+    modal.style.display = "none";
+
+};
+
+window.onclick = e => {
+
+    if (e.target === modal) {
+
+        modal.style.display = "none";
+
+    }
+
+};
+
+//============== ANALİZ ==============//
+
+async function openAnalysis(match){
+
+    modal.style.display = "block";
+
+    analysisContent.innerHTML = `
+
+    <div class="loading-analysis">
+
+        🤖 AI analiz hazırlanıyor...
+
+    </div>
+
+    `;
+
+    const homeLast = await getLastMatches(match.teams.home.id);
+
+    const awayLast = await getLastMatches(match.teams.away.id);
+
+    const homeForm = calculateForm(homeLast,match.teams.home.id);
+
+    const awayForm = calculateForm(awayLast,match.teams.away.id);
+
+    const prediction = generatePrediction(homeForm,awayForm);
+
+    analysisContent.innerHTML = `
+
+    <h2>
+
+        ${match.teams.home.name}
+
+        vs
+
+        ${match.teams.away.name}
+
+    </h2>
+
+    <hr>
+
+    <br>
+
+    <h3>🏠 ${match.teams.home.name}</h3>
+
+    <p>Galibiyet : ${homeForm.win}</p>
+
+    <p>Beraberlik : ${homeForm.draw}</p>
+
+    <p>Mağlubiyet : ${homeForm.lose}</p>
+
+    <br>
+
+    <h3>✈️ ${match.teams.away.name}</h3>
+
+    <p>Galibiyet : ${awayForm.win}</p>
+
+    <p>Beraberlik : ${awayForm.draw}</p>
+
+    <p>Mağlubiyet : ${awayForm.lose}</p>
+
+    <br>
+
+    <h3>🤖 OKAN AI ODDS</h3>
+
+    <p>🏠 Ev Sahibi : %${prediction.home}</p>
+
+    <p>🤝 Beraberlik : %${prediction.draw}</p>
+
+    <p>✈️ Deplasman : %${prediction.away}</p>
+
+    <br>
+
+    <h3>⭐ Güven</h3>
+
+    <p>${prediction.confidence}/100</p>
+
+    <br>
+
+    <h3>💬 AI Yorumu</h3>
+
+    <p>${prediction.comment}</p>
+
+    `;
+
+}
+
+//============== SON 5 MAÇ ==============//
+
+async function getLastMatches(teamId){
+
+    try{
+
+        const response = await fetch(
+
+            `${API_URL}/fixtures?team=${teamId}&last=5`,
+
+            {
+
+                headers:{
+
+                    "x-apisports-key":API_KEY
+
+                }
+
+            }
+
+        );
+
+        const json = await response.json();
+
+        return json.response || [];
+
+    }
+
+    catch{
 
         return [];
 
@@ -592,11 +470,9 @@ async function getLastMatches(teamId){
 
 }
 
-/*====================================================
-            FORM HESAPLAMA
-====================================================*/
+//============== FORM ==============//
 
-function calculateForm(matches, teamId){
+function calculateForm(matches,teamId){
 
     let win=0;
     let draw=0;
@@ -604,26 +480,24 @@ function calculateForm(matches, teamId){
 
     matches.forEach(match=>{
 
-        const home=match.teams.home.id===teamId;
+        const home = match.teams.home.id===teamId;
 
-        const gf=home
-            ? match.goals.home
-            : match.goals.away;
+        const gf = home ? match.goals.home : match.goals.away;
 
-        const ga=home
-            ? match.goals.away
-            : match.goals.home;
+        const ga = home ? match.goals.away : match.goals.home;
 
         if(gf>ga){
 
             win++;
 
         }
+
         else if(gf===ga){
 
             draw++;
 
         }
+
         else{
 
             lose++;
@@ -635,71 +509,437 @@ function calculateForm(matches, teamId){
     return{
 
         win,
+
         draw,
+
         lose
 
     };
 
 }
 
-/*====================================================
-            BÖLÜM 7 / 10
-        AI ANALİZİ V2
-====================================================*/
+//============== AI MOTORU ==============//
 
-async function openAnalysis(match){
+function generatePrediction(home,away){
+
+    let homeChance = 50 + (home.win-away.win)*5;
+
+    homeChance = Math.max(10,Math.min(80,homeChance));
+
+    let awayChance = 100-homeChance-15;
+
+    if(awayChance<10){
+
+        awayChance=10;
+
+    }
+
+    const draw = 100-homeChance-awayChance;
+
+    const confidence = Math.max(homeChance,awayChance);
+
+    let comment="Karşılaşma dengeli görünüyor.";
+
+    if(confidence>=75){
+
+        comment="Belirgin bir favori bulunuyor.";
+
+    }
+
+    else if(confidence>=65){
+
+        comment="Favori taraf bir adım önde.";
+
+    }
+
+    return{
+
+        home:homeChance,
+
+        draw:draw,
+
+        away:awayChance,
+
+        confidence:confidence,
+
+        comment:comment
+
+    };
+
+                }
+
+/*==================================================
+            BÖLÜM 3
+      H2H + İSTATİSTİK + SKOR AI
+==================================================*/
+
+//================ H2H =================//
+
+async function getHeadToHead(homeId, awayId){
+
+    try{
+
+        const response = await fetch(
+
+            `${API_URL}/fixtures/headtohead?h2h=${homeId}-${awayId}&last=5`,
+
+            {
+
+                headers:{
+                    "x-apisports-key":API_KEY
+                }
+
+            }
+
+        );
+
+        const json = await response.json();
+
+        return json.response || [];
+
+    }
+
+    catch{
+
+        return [];
+
+    }
+
+}
+
+//================ GOL ORTALAMASI =================//
+
+function calculateGoalAverage(matches){
+
+    if(matches.length===0){
+
+        return 0;
+
+    }
+
+    let goals=0;
+
+    matches.forEach(match=>{
+
+        goals+=match.goals.home||0;
+        goals+=match.goals.away||0;
+
+    });
+
+    return (goals/matches.length).toFixed(2);
+
+}
+
+//================ KG VAR =================//
+
+function calculateBTTS(matches){
+
+    if(matches.length===0){
+
+        return 0;
+
+    }
+
+    let count=0;
+
+    matches.forEach(match=>{
+
+        if(match.goals.home>0 && match.goals.away>0){
+
+            count++;
+
+        }
+
+    });
+
+    return Math.round((count/matches.length)*100);
+
+}
+
+//================ ÜST 2.5 =================//
+
+function calculateOver25(matches){
+
+    if(matches.length===0){
+
+        return 0;
+
+    }
+
+    let count=0;
+
+    matches.forEach(match=>{
+
+        if((match.goals.home+match.goals.away)>=3){
+
+            count++;
+
+        }
+
+    });
+
+    return Math.round((count/matches.length)*100);
+
+}
+
+//================ TAHMİNİ SKOR =================//
+
+function predictScore(home,away){
+
+    if(home.win>=4 && away.lose>=3){
+
+        return "2-0";
+
+    }
+
+    if(home.win>=3 && away.win>=3){
+
+        return "2-1";
+
+    }
+
+    if(home.draw>=3 && away.draw>=3){
+
+        return "1-1";
+
+    }
+
+    if(away.win>home.win){
+
+        return "1-2";
+
+    }
+
+    return "1-0";
+
+}
+
+//================ PREMIUM =================//
+
+function premiumComment(prediction){
+
+    if(prediction.confidence>=80){
+
+        return "🔥 Premium AI: Çok yüksek güven. Favori taraf güçlü görünüyor.";
+
+    }
+
+    if(prediction.confidence>=70){
+
+        return "✅ Premium AI: Bahis için değerlendirilebilir.";
+
+    }
+
+    if(prediction.confidence>=60){
+
+        return "⚠️ Premium AI: Temkinli oynanmalı.";
+
+    }
+
+    return "❌ Premium AI: Bu maç riskli görünüyor.";
+
+}
+
+/*==================================================
+            BÖLÜM 4
+        FINAL AI ANALİZİ
+==================================================*/
+
+async function buildFullAnalysis(match){
 
     const homeLast = await getLastMatches(match.teams.home.id);
     const awayLast = await getLastMatches(match.teams.away.id);
 
+    const h2h = await getHeadToHead(
+        match.teams.home.id,
+        match.teams.away.id
+    );
+
     const homeForm = calculateForm(homeLast, match.teams.home.id);
     const awayForm = calculateForm(awayLast, match.teams.away.id);
 
-    const prediction = generatePrediction(match);
+    const prediction = generatePrediction(homeForm, awayForm);
 
-    analysisContent.innerHTML = `
+    const goalAverage =
+        calculateGoalAverage([
+            ...homeLast,
+            ...awayLast
+        ]);
 
-    <h2>${match.teams.home.name} vs ${match.teams.away.name}</h2>
+    const btts =
+        calculateBTTS([
+            ...homeLast,
+            ...awayLast
+        ]);
+
+    const over25 =
+        calculateOver25([
+            ...homeLast,
+            ...awayLast
+        ]);
+
+    const score =
+        predictScore(homeForm, awayForm);
+
+    const premium =
+        premiumComment(prediction);
+
+    let h2hHtml = "";
+
+    if(h2h.length===0){
+
+        h2hHtml="<p>H2H verisi bulunamadı.</p>";
+
+    }else{
+
+        h2h.forEach(game=>{
+
+            h2hHtml+=`
+
+            <p>
+
+            ${game.teams.home.name}
+
+            ${game.goals.home}
+
+            -
+
+            ${game.goals.away}
+
+            ${game.teams.away.name}
+
+            </p>
+
+            `;
+
+        });
+
+    }
+
+    analysisContent.innerHTML=`
+
+    <h2>
+
+    ${match.teams.home.name}
+
+    vs
+
+    ${match.teams.away.name}
+
+    </h2>
 
     <hr><br>
 
-    <h3>🏠 ${match.teams.home.name}</h3>
+    <h3>📈 Form</h3>
 
-    <p>✅ Galibiyet : ${homeForm.win}</p>
+    <p>
 
-    <p>➖ Beraberlik : ${homeForm.draw}</p>
+    🏠 ${match.teams.home.name}
 
-    <p>❌ Mağlubiyet : ${homeForm.lose}</p>
+    ${homeForm.win}G
+
+    ${homeForm.draw}B
+
+    ${homeForm.lose}M
+
+    </p>
+
+    <p>
+
+    ✈️ ${match.teams.away.name}
+
+    ${awayForm.win}G
+
+    ${awayForm.draw}B
+
+    ${awayForm.lose}M
+
+    </p>
 
     <br>
 
-    <h3>✈️ ${match.teams.away.name}</h3>
+    <h3>⚔️ Son Karşılaşmalar</h3>
 
-    <p>✅ Galibiyet : ${awayForm.win}</p>
+    ${h2hHtml}
 
-    <p>➖ Beraberlik : ${awayForm.draw}</p>
+    <br>
 
-    <p>❌ Mağlubiyet : ${awayForm.lose}</p>
+    <h3>📊 İstatistikler</h3>
+
+    <p>⚽ Gol Ortalaması : ${goalAverage}</p>
+
+    <p>🥅 KG Var : %${btts}</p>
+
+    <p>🔥 2.5 Üst : %${over25}</p>
 
     <br>
 
     <h3>🤖 OKAN AI ODDS</h3>
 
-    <p>Ev Sahibi: %${prediction.home}</p>
+    <p>🏠 Ev Sahibi : %${prediction.home}</p>
 
-    <p>Beraberlik: %${prediction.draw}</p>
+    <p>🤝 Beraberlik : %${prediction.draw}</p>
 
-    <p>Deplasman: %${prediction.away}</p>
+    <p>✈️ Deplasman : %${prediction.away}</p>
 
-    <p>Güven: ${prediction.confidence}/100</p>
+    <p>⭐ Güven : ${prediction.confidence}/100</p>
 
     <br>
 
-    <p>${createAIComment(prediction)}</p>
+    <h3>🎯 Tahmini Skor</h3>
+
+    <h2>${score}</h2>
+
+    <br>
+
+    <h3>💎 Premium AI</h3>
+
+    <p>${premium}</p>
+
+    `;
+}
+
+/*==================================================
+        openAnalysis GÜNCELLE
+==================================================*/
+
+async function openAnalysis(match){
+
+    modal.style.display="block";
+
+    analysisContent.innerHTML=`
+
+    <div style="padding:40px;text-align:center">
+
+    🤖 OKAN AI ODDS analiz yapıyor...
+
+    </div>
 
     `;
 
-    modal.style.display = "block";
+    await buildFullAnalysis(match);
 
 }
+
+/*==================================================
+        GÜNÜN EN GÜVENLİ MAÇI
+==================================================*/
+
+function getSafestMatch(){
+
+    if(allMatches.length===0){
+
+        return null;
+
+    }
+
+    return allMatches[0];
+
+}
+
+/*==================================================
+        SÜRÜM
+==================================================*/
+
+console.log("OKAN AI ODDS v1.0 hazır.");
 
