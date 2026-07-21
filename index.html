@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>OKAN AI ODDS</title>
 
 <link rel="stylesheet" href="style.css">
@@ -10,20 +11,68 @@
 
 <body>
 
-<h1>⚽ OKAN AI ODDS</h1>
+<header class="header">
 
-<p>Yapay Zeka Destekli Futbol Analiz Sistemi</p>
+<div class="logo">
+⚽ <span>OKAN AI ODDS</span>
+</div>
+
+<nav>
+<button class="menu-btn">☰</button>
+</nav>
+
+</header>
+
+<section class="hero">
+
+<h1>Profesyonel Futbol Analiz Platformu</h1>
+
+<p>
+Yapay zekâ destekli futbol analizleri, istatistikler ve maç tahminleri.
+</p>
+
+</section>
+
+<section class="search-box">
 
 <input
-type="text"
 id="match"
-placeholder="Örn: Galatasaray - Fenerbahçe">
+type="text"
+placeholder="Takım veya lig ara...">
 
-<br>
+<button id="btn">
+Maçları Getir
+</button>
 
-<button id="btn">🔍 Analiz Et</button>
+</section>
 
-<div id="sonuc"></div>
+<section>
+
+<h2 class="title">
+🔥 Bugünkü Maçlar
+</h2>
+
+<div id="sonuc">
+
+<div class="loading">
+
+Maçlar yükleniyor...
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+<p>
+
+© 2026 OKAN AI ODDS
+
+</p>
+
+</footer>
 
 <script src="script.js"></script>
 
